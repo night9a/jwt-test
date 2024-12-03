@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -9,7 +10,9 @@ jwt = JWTManager(app)
 
 # Dummy user data
 users = {"test@example.com": {"password": "password123", "id": 1}}
-
+@app.route('/')
+def index():
+    return render_template("index.html")
 # Route to authenticate user and generate JWT token
 @app.route('/login', methods=['POST'])
 def login():
