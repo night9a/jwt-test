@@ -12,6 +12,7 @@
             --background-color: #121212;
             --surface-color: #1E1E1E;
             --text-color: #FFFFFF;
+            --text-color-secondary: #B0B0B0;
         }
 
         * {
@@ -26,6 +27,40 @@
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease forwards;
+            animation-delay: 2s;
+        }
+
+        #splash-screen img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeOut {
+            from { 
+                opacity: 1;
+                visibility: visible;
+            }
+            to { 
+                opacity: 0;
+                visibility: hidden;
+            }
         }
 
         /* Navigation Styles */
@@ -91,7 +126,68 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Interactive Elements */
+        /* Custom Android-like Select */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .custom-select-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            padding: 12px 15px;
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-select-trigger::after {
+            content: '▼';
+            font-size: 0.8em;
+            color: var(--text-color-secondary);
+            margin-left: 10px;
+        }
+
+        .custom-select-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            border: 1px solid var(--primary-color);
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .custom-select-options.show {
+            display: block;
+        }
+
+        .custom-select-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-select-option:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .custom-select-option.selected {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+
+        /* Slider Styles */
         .slider-container {
             margin: 20px 0;
         }
@@ -120,28 +216,7 @@
             border-radius: 50%;
         }
 
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .dropdown-select {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--surface-color);
-            color: var(--text-color);
-            border: 1px solid var(--primary-color);
-            border-radius: 4px;
-            appearance: none;
-            cursor: pointer;
-        }
-
-        .dropdown-select:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
-
+        /* Button Styles */
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -149,7 +224,7 @@
             color: var(--text-color);
             text-decoration: none;
             border-radius: 4px;
-            margin: 10px 0;
+            margin: 10px 5px;
             position: relative;
             overflow: hidden;
         }
@@ -229,6 +304,12 @@
     </style>
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook Logo">
+        <p>MyApp</p>
+    </div>
+
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-brand">MyApp</div>
@@ -245,21 +326,21 @@
         <div class="card" style="--delay:1">
             <h2>Interactive Components</h2>
             
-            <!-- Dropdown -->
+            <!-- Slider -->
             <div class="slider-container">
                 <label for="example-slider">Example Slider</label>
                 <input type="range" min="0" max="100" value="50" class="slider" id="example-slider">
             </div>
 
-            <!-- Dropdown -->
-            <div class="slider-container">
-                <label for="category-select">Select Category</label>
-                <select class="dropdown-select" id="category-select">
-                    <option>Technology</option>
-                    <option>Design</option>
-                    <option>Marketing</option>
-                    <option>Development</option>
-                </select>
+            <!-- Custom Android-like Select -->
+            <div class="custom-select">
+                <div class="custom-select-trigger">Select Category</div>
+                <div class="custom-select-options">
+                    <div class="custom-select-option" data-value="technology">Technology</div>
+                    <div class="custom-select-option" data-value="design">Design</div>
+                    <div class="custom-select-option" data-value="marketing">Marketing</div>
+                    <div class="custom-select-option" data-value="development">Development</div>
+                </div>
             </div>
 
             <!-- Buttons -->
@@ -288,5 +369,44 @@
         </script>
         <script type="text/javascript" src="//wheelchairbewilderedwaver.com/56626b1d8dd6666380892f2c47e4111f/invoke.js"></script>
     </div>
+
+    <script>
+        // Custom Select Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const customSelect = document.querySelector('.custom-select');
+            const trigger = customSelect.querySelector('.custom-select-trigger');
+            const options = customSelect.querySelector('.custom-select-options');
+            const optionItems = options.querySelectorAll('.custom-select-option');
+
+            // Toggle dropdown
+            trigger.addEventListener('click', () => {
+                options.classList.toggle('show');
+            });
+
+            // Select option
+            optionItems.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove previous selected
+                    optionItems.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Mark current as selected
+                    option.classList.add('selected');
+                    
+                    // Update trigger text
+                    trigger.textContent = option.textContent;
+                    
+                    // Close dropdown
+                    options.classList.remove('show');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!customSelect.contains(event.target)) {
+                    options.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
