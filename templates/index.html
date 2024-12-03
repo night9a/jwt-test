@@ -1,100 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ad Banner Example</title>
-  <style>
-    /* Reset body styles */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Android-like App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3700B3;
+            --secondary-color: #03DAC6;
+            --background-color: #121212;
+            --surface-color: #1E1E1E;
+            --text-color: #FFFFFF;
+        }
 
-    /* Navigation bar styles */
-    .navbar {
-      background-color: #333;
-      color: white;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
 
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 0 10px;
-      font-size: 16px;
-    }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
 
-    .navbar a:hover {
-      text-decoration: underline;
-    }
+        /* Navigation Styles */
+        .navbar {
+            background-color: var(--surface-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    /* Page content styles */
-    .content {
-      flex: 1;
-      padding: 80px 20px; /* Add padding to compensate for the navbar */
-      text-align: center;
-    }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
 
-    /* Ad banner styles */
-    .ad-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50px; /* Matches the ad height */
-      background-color: #f9f9f9;
-      text-align: center;
-      z-index: 1000;
-    }
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
 
-    .ad-banner iframe {
-      width: 320px;
-      height: 50px;
-      border: none;
-    }
-  </style>
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Content Styles */
+        .content {
+            padding: 80px 20px 100px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Interactive Elements */
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider {
+            width: 100%;
+            appearance: none;
+            height: 10px;
+            background: var(--primary-color);
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            border-radius: 5px;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary-color);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .dropdown-select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--background-color);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn:active::before {
+            width: 200px;
+            height: 200px;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Ad Banner Styles */
+        .ad-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .ad-banner iframe {
+            max-width: 320px;
+            height: 50px;
+            border: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                flex-direction: column;
+            }
+
+            .nav-menu a {
+                margin: 5px 0;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card, .btn {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+    </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <div class="navbar">
-    <div class="nav-items">
-      <a href="#">Home</a>
-      <a href="#">Store</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">MyApp</div>
+        <div class="nav-menu">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Features</a>
+            <a href="#" class="nav-link">Explore</a>
+            <a href="#" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="card" style="--delay:1">
+            <h2>Interactive Components</h2>
+            
+            <!-- Dropdown -->
+            <div class="slider-container">
+                <label for="example-slider">Example Slider</label>
+                <input type="range" min="0" max="100" value="50" class="slider" id="example-slider">
+            </div>
+
+            <!-- Dropdown -->
+            <div class="slider-container">
+                <label for="category-select">Select Category</label>
+                <select class="dropdown-select" id="category-select">
+                    <option>Technology</option>
+                    <option>Design</option>
+                    <option>Marketing</option>
+                    <option>Development</option>
+                </select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="slider-container">
+                <a href="#" class="btn" style="--delay:2">Learn More</a>
+                <a href="#" class="btn" style="--delay:3">Get Started</a>
+            </div>
+        </div>
+
+        <div class="card" style="--delay:4">
+            <h2>Additional Information</h2>
+            <p>Explore our modern, Android-inspired design with smooth animations and interactive elements.</p>
+        </div>
     </div>
-  </div>
 
-  <!-- Main Content -->
-  <div class="content">
-    <h1>Welcome to My Website</h1>
-    <p>This is the main content of the page.</p>
-  </div>
-
-  <!-- Ad Banner -->
-  <div class="ad-banner">
-    <script type="text/javascript">
-      atOptions = {
-        'key': '56626b1d8dd6666380892f2c47e4111f',
-        'format': 'iframe',
-        'height': 50,
-        'width': 320,
-        'params': {}
-      };
-    </script>
-    <script type="text/javascript" src="//wheelchairbewilderedwaver.com/56626b1d8dd6666380892f2c47e4111f/invoke.js"></script>
-  </div>
+    <!-- Ad Banner -->
+    <div class="ad-banner">
+        <script type="text/javascript">
+            atOptions = {
+                'key': '56626b1d8dd6666380892f2c47e4111f',
+                'format': 'iframe',
+                'height': 50,
+                'width': 320,
+                'params': {}
+            };
+        </script>
+        <script type="text/javascript" src="//wheelchairbewilderedwaver.com/56626b1d8dd6666380892f2c47e4111f/invoke.js"></script>
+    </div>
 </body>
 </html>
