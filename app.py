@@ -10,6 +10,9 @@ jwt = JWTManager(app)
 
 # Dummy user data
 users = {"test@example.com": {"password": "password123", "id": 1}}
+@app.route('/zohoverify/verifyforzoho.html')
+def email():
+    return render_template("verifyforzoho.html")
 @app.route('/')
 def index():
     return render_template("index.html")
